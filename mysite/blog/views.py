@@ -20,16 +20,13 @@ class PostListView(ListView):
 # II sposób na widok
 def post_list(request):
     object_list = Post.published.all()
-    paginator = Paginator(object_list, 3)  # po 3 posty na każdej stronie
-    page = request.GET.get('page')  # parametr GET.page wskazującego na numer bieżącej strony
+    paginator = Paginator(object_list, 3)
+    page = request.GET.get('page')
     try:
         posts = paginator.page(page)
     except PageNotAnInteger:
-        # jeżeli zmienna page nie jest liczbą całkowitą to pobierana jest pierwsza strona wyników
         posts = paginator.page(1)
     except EmptyPage:
-        # jeżeli zmienna page ma wartość większą niż numer ostatniej strony wyników
-        # to pobierana jest ostatnia strona wyników
         posts = paginator.page(paginator.num_pages)
     return render(request,
                   'blog/post/list.html',
